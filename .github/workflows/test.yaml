@@ -1,0 +1,19 @@
+name: Run Tests
+
+on: [push]
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: Run tests
+        working-directory: example-react-app
+        run: | 
+          npm ci
+          npm run test
