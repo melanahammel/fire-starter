@@ -1,0 +1,27 @@
+name: Deploy Cloudformation Template
+
+on: [push]
+
+jobs:
+  deploy-cloudformation:
+    name: Deploy CloudFormation template
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_IAM_ROLE }}
+          aws-region: us-east-1
+
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: fire-starter-stack
+          template: cloudformation/template.yaml
+          no-fail-on-empty-changeset: '1'
