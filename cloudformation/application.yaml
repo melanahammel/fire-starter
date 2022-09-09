@@ -1,0 +1,95 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  EcrRepositoryName:
+    Type: String
+    Description: Name for the ECR Repository
+    Default: 'fire-starter-ecr-repository'
+
+Resources:
+  FireStarterEcrRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref EcrRepositoryName
+#      RepositoryPolicyText:
+#        Version: '2012-10-17'
+#        Statement:
+#          - Effect: Allow
+#            Principal:
+#              AWS: !GetAtt AppRunnerServiceRole.Arn
+#            Action:
+#              - 'ecr:*'
+#        LifecyclePolicy:
+#          LifecyclePolicyText: |
+#            {
+#              "rules": [
+#              {
+#                "rulePriority": 1,
+#                "description": "Expire and delete old ECR images",
+#                "selection": {
+#                  "tagStatus": "any",
+#                  "countType": "imageCountMoreThan",
+#                  "countNumber": 10
+#                },
+#                "action": { "type": "expire" }
+#              }]
+#            }
+
+  EcrFullAccessManagedPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'ecr:*'
+            Resource: '*'
+      Roles:
+        - !ImportValue GithubRole
+
+  AssumeRoleForAppRunnerPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'sts:AssumeRole'
+            Resource: !GetAtt AppRunnerServiceRole.Arn
+      Roles:
+        - !ImportValue GithubRole
+
+  AppRunnerManagedPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'apprunner:ListServices'
+              - 'apprunner:DescribeService'
+              - 'apprunner:CreateService'
+              - 'apprunner:UpdateService'
+              - 'apprunner:DeleteService'
+            Resource: '*'
+      Roles:
+        - !ImportValue GithubRole
+
+  AppRunnerServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: app-runner-service-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - build.apprunner.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess

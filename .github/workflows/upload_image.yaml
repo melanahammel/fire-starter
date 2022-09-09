@@ -1,4 +1,4 @@
-name: Build Image and Upload to AWS ECR
+name: Upload Image to AWS ECR
 
 on: [push]
 
@@ -11,23 +11,24 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Github repo
+        uses: actions/checkout@v3
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.AWS_GITHUB_IAM_ROLE }}
+          role-to-assume: ${{ secrets.AWS_GITHUB_ROLE_ARN }}
           aws-region: us-east-1
 
-      - name: Login to Amazon ECR
+      - name: Login to AWS ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push image to AWS ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPO_NAME }}
+          ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
