@@ -1,21 +1,44 @@
-import fire from './fire.png';
 import './App.css';
+import Lottie from "lottie-react";
+import firewoodAnimation from "./assets/firewood.json";
+import githubLogo from "./assets/github-logo.png";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Welcome to Fire Starter!</h1>
-        <img src={fire} className="App-logo" alt="fire" />
-        <a
-          className="App-link"
-          href="https://github.com/melanahammel/fire-starter"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Get Started on Github
-        </a>
-      </header>
+      <div className="App-body">
+        <div className="body-column">
+          <div className="animation">
+            <Lottie animationData={firewoodAnimation}/>
+          </div>
+        </div>
+        <div className="body-column">
+          <div className="content">
+            <div className="title">Fire Starter</div>
+            <div className="body">Take a website running locally and deploy it
+              to a production cloud environment
+            </div>
+            <div className="github-link">
+              <a
+                className="github-logo"
+                href="https://github.com/melanahammel/fire-starter"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img alt="Github Logo" src={githubLogo} height="30" width="30"/>
+              </a>
+              <a
+                className="App-link"
+                href="https://github.com/melanahammel/fire-starter"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Get Started on Github
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

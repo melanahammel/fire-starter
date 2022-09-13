@@ -1,23 +1,64 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #BC986A;
+.App-body {
+  background-color: #282c34;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  font-family: 'Red Hat Display', serif;
+  height: 100%;
+}
+
+.body-column {
+  flex-direction: column;
+  float: left;
+  height: 100%;
+  width: 50%;
+}
+
+.animation {
+  height: 100%;
+  margin-left: 100px;
+  margin-bottom: 30px;
+}
+
+.content {
+  text-align: left;
+  margin-top: 50px;
+  margin-left: 10px;
+}
+
+.title {
+  font-size: 100px;
+  margin-bottom: 40px;
+}
+
+.body {
+  font-size: 35px;
+  margin-bottom: 50px;
+  width: 650px;
+}
+
+.github-link {
+  flex-direction: row;
+}
+
+.github-logo {
+  vertical-align: middle;
+  margin-right: 15px;
 }
 
 .App-link {
   color: white;
+  font-size: 30px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: gray;
 }
