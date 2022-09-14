@@ -1,6 +1,6 @@
 name: Deploy AWS Cloudformation Template
 
-on: [push]
+on: workflow_call
 
 jobs:
   deploy-cloudformation:

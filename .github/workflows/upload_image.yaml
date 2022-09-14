@@ -1,6 +1,6 @@
 name: Upload Image to AWS ECR
 
-on: [push]
+on: workflow_call
 
 jobs:
   build:
