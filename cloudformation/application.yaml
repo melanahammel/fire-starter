@@ -11,29 +11,21 @@ Resources:
     Type: AWS::ECR::Repository
     Properties:
       RepositoryName: !Ref EcrRepositoryName
-#      RepositoryPolicyText:
-#        Version: '2012-10-17'
-#        Statement:
-#          - Effect: Allow
-#            Principal:
-#              AWS: !GetAtt AppRunnerServiceRole.Arn
-#            Action:
-#              - 'ecr:*'
-#        LifecyclePolicy:
-#          LifecyclePolicyText: |
-#            {
-#              "rules": [
-#              {
-#                "rulePriority": 1,
-#                "description": "Expire and delete old ECR images",
-#                "selection": {
-#                  "tagStatus": "any",
-#                  "countType": "imageCountMoreThan",
-#                  "countNumber": 10
-#                },
-#                "action": { "type": "expire" }
-#              }]
-#            }
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+            {
+              "rulePriority": 1,
+              "description": "Expire and delete old ECR images",
+              "selection": {
+                "tagStatus": "any",
+                "countType": "imageCountMoreThan",
+                "countNumber": 10
+              },
+              "action": { "type": "expire" }
+            }]
+          }
 
   EcrFullAccessManagedPolicy:
     Type: 'AWS::IAM::ManagedPolicy'

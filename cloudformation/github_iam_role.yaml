@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  GitHubOrg:
+    Type: String
+  RepositoryName:
+    Type: String
+  OIDCProviderArn:
+    Description: Arn for the GitHub OIDC Provider.
+    Default: ""
+    Type: String
+  OIDCThumbprint:
+    Description: Certificate thumbprint associated with the GitHub Actions server certificates.
+    Type: String
+
+
+Conditions:
+  CreateOIDCProvider: !Equals
+    - !Ref OIDCProviderArn
+    - ""
+
+Resources:
+  GithubRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: github-user-role
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRoleWithWebIdentity
+            Principal:
+              Federated: !If
+                - CreateOIDCProvider
+                - !Ref GithubOidc
+                - !Ref OIDCProviderArn
+            Condition:
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/${RepositoryName}:*
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+      Policies:
+        - PolicyName: CreateManagedPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'iam:CreatePolicy'
+                  - 'iam:GetPolicy'
+                  - 'iam:DeletePolicy'
+                  - 'iam:AttachRolePolicy'
+                  - 'iam:DetachRolePolicy'
+                  - 'iam:ListPolicyVersions'
+                Resource: '*'
+        - PolicyName: CreateRole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'iam:CreateRole'
+                  - 'iam:CreateServiceLinkedRole'
+                  - 'iam:GetRole'
+                  - 'iam:DeleteRole'
+                  - 'iam:PassRole'
+                Resource: '*'
+        - PolicyName: CreateEcrRepository
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ecr:CreateRepository'
+                  - 'ecr:DeleteRepository'
+                Resource: '*'
+
+  GithubOidc:
+    Type: AWS::IAM::OIDCProvider
+    Condition: CreateOIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - !Ref OIDCThumbprint
+
+Outputs:
+  GithubRole:
+    Value: !Ref GithubRole
+    Export:
+      Name: GithubRole
