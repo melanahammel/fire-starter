@@ -31,13 +31,13 @@
 }
 
 .title {
-  font-size: 100px;
-  margin-bottom: 40px;
+  font-size: 120px;
+  margin-bottom: 80px;
 }
 
 .body {
-  font-size: 35px;
-  margin-bottom: 50px;
+  font-size: 45px;
+  margin-bottom: 80px;
   width: 650px;
 }
 
@@ -52,7 +52,7 @@
 
 .App-link {
   color: white;
-  font-size: 30px;
+  font-size: 40px;
 }
 
 a {
