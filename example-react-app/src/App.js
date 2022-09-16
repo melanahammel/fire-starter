@@ -25,7 +25,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img alt="Github Logo" src={githubLogo} height="30" width="30"/>
+                <img alt="Github Logo" src={githubLogo} width="100%"/>
               </a>
               <a
                 className="App-link"
