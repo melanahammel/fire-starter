@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Deploy to AWS App Runner
 
 on: workflow_call
 

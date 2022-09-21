@@ -1,9 +1,15 @@
-name: Upload Image to AWS ECR
+name: Build and Deploy
 
-on: workflow_call
+on: push
 
 jobs:
-  build:
+
+  deploy-cloudformation:
+    uses: melanahammel/fire-starter/.github/workflows/deploy_cloudformation.yaml@main
+    secrets:
+      aws-github-role-arn: ${{ secrets.AWS_GITHUB_ROLE_ARN }}
+
+  build-image:
     name: Build, tag, and push image to Amazon ECR
     runs-on: ubuntu-latest
     permissions:

@@ -1,6 +1,10 @@
 name: Deploy AWS Cloudformation Template
 
-on: workflow_call
+on:
+  workflow_call:
+    secrets:
+      aws-github-role-arn:
+        required: true
 
 jobs:
   deploy-cloudformation:
@@ -17,7 +21,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.AWS_GITHUB_ROLE_ARN }}
+          role-to-assume: ${{ secrets.aws-github-role-arn }}
           aws-region: us-east-1
 
       - name: Deploy to AWS CloudFormation
