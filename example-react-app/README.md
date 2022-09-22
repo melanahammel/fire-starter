@@ -2,6 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### Image Attributions
+* [Firewood Animation](https://lottiefiles.com/54405-firewood) by [zhpeng](https://lottiefiles.com/zhpeng) on [LottieFiles](https://lottiefiles.com/)
+* [Fire Icon](https://freesvg.org/vector-image-of-wooden-fire) by [freesvg.org](freesvg.org)
+
+
+The following is the default Create React App README for reference:
+
 ## Available Scripts
 
 In the project directory, you can run:
